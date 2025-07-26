@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Zen - Your Personal Wellness Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex flex-wrap justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-800">Hello, Jasmin! <span>☼</span></h1>
+                    <p class="text-gray-600" id="current-date">Loading today's date...</p>
+                </div>
+                <div class="flex items-center mt-4 sm:mt-0">
+                    <div class="w-12 h-12 rounded-full bg-lavender flex items-center justify-center">
+                        <span class="text-xl">👤</span>
+                    </div>
+                    <h1 class="text-xl font-extrabold text-purple-700 whitespace-nowrap">DailyDose</h1>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Desktop Navigation -->
+        <div class="desktop-view mb-8">
+            <div class="flex space-x-6 border-b border-gray-200 pb-2">
+                <div class="tab active px-3 py-2" data-tab="dashboard">Dashboard</div>
+                <div class="tab px-3 py-2" data-tab="habits">Habit Tracker</div>
+                <div class="tab px-3 py-2" data-tab="mood">Mood Journal</div>
+                <div class="tab px-3 py-2" data-tab="tasks">To-Do Tasks</div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <main>
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Habits Summary -->
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Daily Habits</h2>
+                            <button class="btn btn-lavender px-3 py-1 text-sm" id="view-all-habits">View All</button>
+                        </div>
+                        <div class="space-y-3" id="habits-summary">
+                            <div class="habit-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="habit-check w-5 h-5 rounded-full border-2 border-gray-300 mr-3"></div>
+                                    <span>Drink 8 glasses of water</span>
+                                </div>
+                                <span class="text-sm text-gray-500">0/8</span>
+                            </div>
+                            <div class="habit-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="habit-check w-5 h-5 rounded-full border-2 border-gray-300 mr-3"></div>
+                                    <span>Meditate for 10 minutes</span>
+                                </div>
+                                <span class="text-sm text-gray-500">0/1</span>
+                            </div>
+                            <div class="habit-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="habit-check w-5 h-5 rounded-full border-2 border-gray-300 mr-3"></div>
+                                    <span>Read for 30 minutes</span>
+                                </div>
+                                <span class="text-sm text-gray-500">0/30</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mood Summary -->
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Today's Mood</h2>
+                            <button class="btn btn-blush px-3 py-1 text-sm" id="view-mood-history">History</button>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">How are you feeling today?</p>
+                        <div class="flex justify-between items-center" id="mood-selector">
+                            <div class="mood-emoji" data-mood="great">😄</div>
+                            <div class="mood-emoji" data-mood="good">🙂</div>
+                            <div class="mood-emoji" data-mood="okay">😐</div>
+                            <div class="mood-emoji" data-mood="sad">😔</div>
+                            <div class="mood-emoji" data-mood="stressed">😫</div>
+                        </div>
+                        <div class="mt-4 text-center hidden" id="mood-selected">
+                            <p class="text-sm">You're feeling <span id="selected-mood-text">great</span> today</p>
+                            <p class="text-xs text-gray-500" id="mood-timestamp"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tasks Summary -->
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">To-Do Tasks</h2>
+                            <button class="btn btn-mint px-3 py-1 text-sm" id="view-all-tasks">View All</button>                           
+                        </div>
+                        <div class="space-y-3" id="tasks-summary">
+                            <div class="task-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded mr-3">
+                                    <span>Prepare presentation for meeting</span>
+                                </div>
+                                <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                            <div class="task-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded mr-3">
+                                    <span>Call mom</span>
+                                </div>
+                                <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                            <div class="task-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded mr-3">
+                                    <span>Buy groceries</span>
+                                </div>
+                                <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                            <div class="task-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded mr-3">
+                                    <span>Project Submission</span>
+                                </div>
+                                <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                            <div class="task-item flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded mr-3">
+                                    <span>Buy Skincare</span>
+                                </div>
+                                <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                        </div>
+                    </div>
+                    
+                    <!-- Quote of the Day -->
+                    <div class="glass-card p-6 flex flex-col justify-center">
+                        <h2 class="text-xl font-semibold mb-4">Quote of the Day</h2>
+                        <div class="quote-text text-lg text-center px-4 py-6" id="quote-text">
+                            "The only way to do great work is to love what you do."
+                        </div>
+                        <div class="text-right text-sm text-gray-600" id="quote-author">
+                            — Steve Jobs
+                        </div>
+                        <button id="new-quote-btn" class="btn btn-sky self-center mt-4 px-4 py-2">New Quote</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Habit Tracker View -->
+            <section id="habits-view" class="hidden fade-in">
+                <div class="glass-card p-6">
+                    <h2 class="text-2xl font-semibold mb-6">Habit Tracker</h2>                    
+                    <div class="mb-6">
+                        <div class="flex">
+                            <input type="text" id="new-habit-input" placeholder="Add a new habit..." class="w-full px-3 py-2 border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <button id="add-habit-btn" class="bg-blue-500 text-white px-4 rounded-r-lg hover:bg-blue-600 focus:outline-none">Add</button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th class="text-left py-2">Habit</th>
+                                    <th class="w-16 text-center">Mon</th>
+                                    <th class="w-16 text-center">Tue</th>
+                                    <th class="w-16 text-center">Wed</th>
+                                    <th class="w-16 text-center">Thu</th>
+                                    <th class="w-16 text-center">Fri</th>
+                                    <th class="w-16 text-center">Sat</th>
+                                    <th class="w-16 text-center">Sun</th>
+                                    <th class="w-16 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="habits-table-body">
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3">Drink 8 glasses of water</td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center">
+                                        <button class="delete-habit-btn text-gray-400 hover:text-gray-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3">Meditate for 10 minutes</td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center">
+                                        <button class="delete-habit-btn text-gray-400 hover:text-gray-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3">Read for 30 minutes</td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center"><div class="habit-check w-6 h-6 rounded-full border-2 border-gray-300 mx-auto"></div></td>
+                                    <td class="text-center">
+                                        <button class="delete-habit-btn text-gray-400 hover:text-gray-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Mood Journal View -->
+            <section id="mood-view" class="hidden fade-in">
+                <div class="glass-card p-6">
+                    <h2 class="text-2xl font-semibold mb-6">Mood Journal</h2>
+                    
+                    <div class="mb-8">
+                        <p class="text-gray-600 mb-4">How are you feeling today?</p>
+                        <div class="flex justify-between items-center max-w-md mx-auto" id="mood-journal-selector">
+                            <div class="mood-emoji text-3xl" data-mood="great">😄</div>
+                            <div class="mood-emoji text-3xl" data-mood="good">🙂</div>
+                            <div class="mood-emoji text-3xl" data-mood="okay">😐</div>
+                            <div class="mood-emoji text-3xl" data-mood="sad">😔</div>
+                            <div class="mood-emoji text-3xl" data-mood="stressed">😫</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="mood-notes" class="block text-gray-600 mb-2">Add notes about your day (optional)</label>
+                        <textarea id="mood-notes" rows="4" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Write your thoughts here..."></textarea>
+                        <button id="save-mood-btn" class="btn btn-blush mt-3 px-4 py-2">Save Entry</button>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 mt-8">Mood History</h3>
+                    <div id="mood-history" class="space-y-4">
+                        <div class="flex items-center p-3 border-l-4 border-yellow-400 bg-white rounded shadow-sm relative">
+                            <div class="text-2xl mr-4">🙂</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <p class="font-medium">Good</p>
+                                    <p class="text-sm text-gray-500">Yesterday, 3:45 PM</p>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Had a productive day at work, but felt a bit tired in the evening.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 border-l-4 border-yellow-400 bg-white rounded shadow-sm relative">
+                            <div class="text-2xl mr-4">😄</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <p class="font-medium">Great</p>
+                                    <p class="text-sm text-gray-500">2 days ago, 9:20 AM</p>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Morning run was amazing! Feeling energized and ready for the day.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tasks View -->
+            <section id="tasks-view" class="hidden fade-in">
+                <div class="glass-card p-6">
+                    <h2 class="text-2xl font-semibold mb-6">To-Do Tasks</h2>
+                    
+                    <div class="mb-6">
+                        <div class="flex">
+                            <input type="text" id="task-view-input" placeholder="Add a new task..." class="w-full px-3 py-2 border border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <button id="task-view-add-btn" class="bg-blue-500 text-white px-4 rounded-r-lg hover:bg-blue-600 focus:outline-none">Add</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex space-x-2">
+                            <button class="btn btn-mint px-3 py-1 text-sm task-filter active" data-filter="all">All</button>
+                            <button class="btn px-3 py-1 text-sm task-filter" data-filter="active">Active</button>
+                            <button class="btn px-3 py-1 text-sm task-filter" data-filter="completed">Completed</button>
+                        </div>
+                    </div>
+                    
+                    <div id="tasks-list" class="space-y-3">
+                        <div class="task-item flex items-center justify-between p-3 bg-white rounded shadow-sm">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 rounded mr-3">
+                                <span>Prepare presentation for meeting</span>
+                            </div>
+                            <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                        <div class="task-item flex items-center justify-between p-3 bg-white rounded shadow-sm">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 rounded mr-3">
+                                <span>Call mom</span>
+                            </div>
+                            <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                        <div class="task-item flex items-center justify-between p-3 bg-white rounded shadow-sm">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 rounded mr-3">
+                                <span>Buy groceries</span>
+                            </div>
+                            <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                        <div class="task-item flex items-center justify-between p-3 bg-white rounded shadow-sm">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="w-5 h-5 rounded mr-3">
+                                <span>Send email to client</span>
+                            </div>
+                            <button class="delete-task-btn text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav fixed bottom-0 left-0 right-0 bg-white shadow-lg py-2">
+            <div class="flex justify-center gap-x-14 items-center w-full max-w-md mx-auto">
+                <div class="mobile-tab flex flex-col items-center space-y-1 p-2" data-tab="dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span class="text-xs">Dashboard</span>
+                </div>
+                <div class="mobile-tab flex flex-col items-center space-y-1 p-2" data-tab="habits">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span class="text-xs">Habits</span>
+                </div>
+                <div class="mobile-tab flex flex-col items-center space-y-1 p-2" data-tab="mood">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    <span class="text-xs">Mood</span>
+                </div>
+                <div class="mobile-tab flex flex-col items-center space-y-1 p-2" data-tab="tasks">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span class="text-xs">Tasks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
